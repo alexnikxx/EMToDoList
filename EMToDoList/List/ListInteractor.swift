@@ -14,15 +14,15 @@ class ListInteractor: ListInteractorProtocol {
         self.presenter = presenter
     }
 
-    func addTodo(todo: Todo) {
+    func addTodo(todo: CustomTodo) {
 
     }
     
-    func editTodo(todo: Todo) {
+    func editTodo(todo: CustomTodo) {
 
     }
     
-    func deleteTodo(todo: Todo) {
+    func deleteTodo(todo: CustomTodo) {
         
     }
     

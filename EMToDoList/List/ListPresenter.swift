@@ -20,15 +20,15 @@ class ListPresenter: ListPresenterProtocol {
 
     }
     
-    func todoTapped(todo: Todo) {
+    func todoTapped(todo: CustomTodo) {
 
     }
     
-    func editTodoButtonTapped(todo: Todo) {
+    func editTodoButtonTapped(todo: CustomTodo) {
 
     }
     
-    func deleteTodoButtonTapped(todo: Todo) {
+    func deleteTodoButtonTapped(todo: CustomTodo) {
         
     }
     

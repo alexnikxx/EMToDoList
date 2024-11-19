@@ -25,12 +25,46 @@ class ListViewController: UIViewController, ListViewProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.title = "Задачи"
         setupView()
         setupSearchController()
 
+        navigationController?.isToolbarHidden = false
+        navigationController?.setToolbarHidden(false, animated: false)
+        navigationController?.toolbar.barTintColor = .todoBlack
+        navigationController?.toolbar.tintColor = .todoWhite
+        if let toolbar = navigationController?.toolbar {
+            print("Toolbar frame: \(toolbar.frame)")
+            print("Toolbar hidden: \(navigationController?.isToolbarHidden ?? true)")
+        }
+
         tableView.delegate = self
         tableView.dataSource = self
+    }
+
+    @objc func actionTapped() {
+        print("Action tapped")
+    }
+
+    @objc func settingsTapped() {
+        print("Settings tapped")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        navigationItem.title = "Задачи"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let actionButton = UIBarButtonItem(title: "Action", style: .plain, target: self, action: #selector(actionTapped))
+        let settingsButton = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
+
+        // Set toolbar items
+        toolbarItems = [actionButton, flexibleSpace, settingsButton]
+        setToolbarItems(toolbarItems, animated: false)
+    }
+
+    override func setToolbarItems(_ toolbarItems: [UIBarButtonItem]?, animated: Bool) {
+
     }
 
     private func setupView() {
@@ -107,6 +141,12 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.checkbox.addGestureRecognizer(tapGestureRecognizer)
 
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let todo = list[indexPath.row]
+        let detailView = DetailViewController(todo: todo)
+        navigationController?.pushViewController(detailView, animated: true)
     }
 
     @objc func tapEdit(recognizer: UITapGestureRecognizer) {

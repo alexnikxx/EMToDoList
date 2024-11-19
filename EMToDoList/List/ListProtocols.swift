@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ListConfiguratorProtocol: AnyObject {
     func configure(for viewController: ListViewProtocol)
@@ -13,15 +14,15 @@ protocol ListConfiguratorProtocol: AnyObject {
 
 protocol ListViewProtocol: AnyObject {
     var presenter: ListPresenterProtocol? { get set }
-
+    var navigationController: UINavigationController? { get }
 }
 
 protocol ListInteractorProtocol: AnyObject {
     var presenter: ListPresenterProtocol? { get set } // weak
 
-    func addTodo(todo: Todo)
-    func editTodo(todo: Todo)
-    func deleteTodo(todo: Todo)
+    func addTodo(todo: CustomTodo)
+    func editTodo(todo: CustomTodo)
+    func deleteTodo(todo: CustomTodo)
 }
 
 protocol ListPresenterProtocol: AnyObject {
@@ -30,14 +31,14 @@ protocol ListPresenterProtocol: AnyObject {
     var view: ListViewProtocol? { get set } // weak
 
     func newTodoButtonTapped()
-    func todoTapped(todo: Todo)
-    func editTodoButtonTapped(todo: Todo)
-    func deleteTodoButtonTapped(todo: Todo)
+    func todoTapped(todo: CustomTodo)
+    func editTodoButtonTapped(todo: CustomTodo)
+    func deleteTodoButtonTapped(todo: CustomTodo)
     func searchButtonTapped()
 }
 
 protocol ListRouterProtocol: AnyObject {
     var view: ListViewProtocol? { get set } // weak
 
-    func openTodoDetails(todo: Todo)
+    func openTodoDetails(todo: CustomTodo)
 }
