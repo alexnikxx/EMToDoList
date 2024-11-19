@@ -9,7 +9,7 @@ import Foundation
 
 final class NetworkService {
     let decoder = JSONDecoder()
-    var notes: TodoList = TodoList(todos: [], total: 0, skip: 0, limit: 0)
+    var jsonTodos: JSONTodoList = JSONTodoList(todos: [], total: 0, skip: 0, limit: 0)
 
     func fetchTodos() {
         DispatchQueue.global().async {
@@ -25,17 +25,28 @@ final class NetworkService {
                     return
                 }
 
-                guard let todos = try? self.decoder.decode(TodoList.self, from: data) else {
+                guard let todos = try? self.decoder.decode(JSONTodoList.self, from: data) else {
                     print("Error decoding")
                     return
                 }
 
                 DispatchQueue.main.async {
-                    self.notes = todos
+                    self.jsonTodos = todos
                 }
             }
 
             task.resume()
         }
+    }
+
+    func createCustomTodos(jsonTodos: JSONTodoList) -> [CustomTodo] {
+        var customTodos: [CustomTodo] = []
+
+        for todo in jsonTodos.todos {
+            let customTodo = CustomTodo(title: todo.todo, text: "", date: Date(), isCompleted: todo.completed)
+            customTodos.append(customTodo)
+        }
+
+        return customTodos
     }
 }
