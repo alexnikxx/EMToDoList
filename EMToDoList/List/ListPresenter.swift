@@ -17,23 +17,23 @@ class ListPresenter: ListPresenterProtocol {
     }
 
     func newTodoButtonTapped() {
-        <#code#>
+
     }
     
     func todoTapped(todo: Todo) {
-        <#code#>
+
     }
     
     func editTodoButtonTapped(todo: Todo) {
-        <#code#>
+
     }
     
     func deleteTodoButtonTapped(todo: Todo) {
-        <#code#>
+        
     }
     
     func searchButtonTapped() {
-        <#code#>
+        
     }
     
 

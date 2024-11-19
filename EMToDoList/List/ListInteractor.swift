@@ -15,15 +15,15 @@ class ListInteractor: ListInteractorProtocol {
     }
 
     func addTodo(todo: Todo) {
-        <#code#>
+
     }
     
     func editTodo(todo: Todo) {
-        <#code#>
+
     }
     
     func deleteTodo(todo: Todo) {
-        <#code#>
+        
     }
     
     

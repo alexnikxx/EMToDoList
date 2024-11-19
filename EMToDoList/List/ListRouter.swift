@@ -15,7 +15,7 @@ class ListRouter: ListRouterProtocol {
     }
 
     func openTodoDetails(todo: Todo) {
-        <#code#>
+        
     }
     
 
