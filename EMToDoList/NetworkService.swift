@@ -11,9 +11,10 @@ final class NetworkService {
     let decoder = JSONDecoder()
     var jsonTodos: JSONTodoList = JSONTodoList(todos: [], total: 0, skip: 0, limit: 0)
 
-    func fetchTodos() {
+    func fetchTodos(completionHandler: @escaping (Result<[CustomTodo], Error>) -> Void) {
         guard let url = URL(string: "https://dummyjson.com/todos") else {
             print("Invalid URL")
+            completionHandler(.failure(NetworkError.invalidURL))
             return
         }
 
@@ -21,21 +22,25 @@ final class NetworkService {
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data else {
                 print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                completionHandler(.failure(NetworkError.invalidData))
                 return
             }
 
             guard let todos = try? self.decoder.decode(JSONTodoList.self, from: data) else {
                 print("Error decoding")
+                completionHandler(.failure(NetworkError.decodingError))
                 return
             }
 
-            self.jsonTodos = todos
+            let customTodos = self.createCustomTodos(from: todos)
+
+            completionHandler(.success(customTodos))
         }
 
         task.resume()
     }
 
-    func createCustomTodos() -> [CustomTodo] {
+    private func createCustomTodos(from jsonTodos: JSONTodoList) -> [CustomTodo] {
         var customTodos: [CustomTodo] = []
 
         for todo in jsonTodos.todos {
@@ -44,5 +49,13 @@ final class NetworkService {
         }
 
         return customTodos
+    }
+}
+
+extension NetworkService {
+    enum NetworkError: Error {
+        case invalidURL
+        case invalidData
+        case decodingError
     }
 }

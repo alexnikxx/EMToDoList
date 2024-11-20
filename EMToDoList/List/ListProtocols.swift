@@ -15,6 +15,8 @@ protocol ListConfiguratorProtocol: AnyObject {
 protocol ListViewProtocol: AnyObject {
     var presenter: ListPresenterProtocol? { get set }
     var navigationController: UINavigationController? { get }
+
+    func displayLoadedData(customTodos: [CustomTodo])
 }
 
 protocol ListInteractorProtocol: AnyObject {
@@ -23,7 +25,7 @@ protocol ListInteractorProtocol: AnyObject {
     func addTodo(todo: CustomTodo)
     func editTodo(todo: CustomTodo)
     func deleteTodo(todo: CustomTodo)
-    func loadTodos() -> [CustomTodo]
+    func loadTodos()
 }
 
 protocol ListPresenterProtocol: AnyObject {
@@ -31,7 +33,8 @@ protocol ListPresenterProtocol: AnyObject {
     var interactor: ListInteractorProtocol? { get set }
     var view: ListViewProtocol? { get set } // weak
 
-    func appRuns() -> [CustomTodo]
+    func appStarts()
+    func showData(todos: [CustomTodo])
     func newTodoButtonTapped()
     func todoTapped(todo: CustomTodo)
     func editTodoButtonTapped(todo: CustomTodo)

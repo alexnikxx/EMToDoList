@@ -10,10 +10,11 @@ import UIKit
 class ListViewController: UIViewController, ListViewProtocol {
     let configurator = ListConfigurator()
     var presenter: ListPresenterProtocol?
-    var list: [CustomTodo] = []
-    var filteredList: [CustomTodo] = []
 
-    private let tableView: UITableView = {
+    private var list: [CustomTodo] = []
+    private var filteredList: [CustomTodo] = []
+
+    var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .todoBlack
         tableView.allowsSelection = true
@@ -22,13 +23,24 @@ class ListViewController: UIViewController, ListViewProtocol {
         return tableView
     }()
 
+//    private var activityIndicator: UIActivityIndicatorView = {
+//        let indicator = UIActivityIndicatorView(style: .large)
+//        indicator.translatesAutoresizingMaskIntoConstraints = false
+//        indicator.hidesWhenStopped = true
+//        return indicator
+//    }()
+
     private let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configurator.configure(for: self)
+
         setupView()
         setupSearchController()
+//        setupActivityIndicator()
+//
+//        showLoadingIndicator()
 
         navigationController?.toolbar.isTranslucent = false
         navigationController?.setToolbarHidden(false, animated: false)
@@ -37,6 +49,12 @@ class ListViewController: UIViewController, ListViewProtocol {
 
         tableView.delegate = self
         tableView.dataSource = self
+    }
+
+    func displayLoadedData(customTodos: [CustomTodo]) {
+//        hideLoadingIndicator()
+        self.list = customTodos
+        tableView.reloadData()
     }
 
     @objc func actionTapped() {
@@ -48,8 +66,7 @@ class ListViewController: UIViewController, ListViewProtocol {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        guard let presenter else { return }
-        list = presenter.appRuns()
+        presenter?.appStarts()
 
         navigationItem.title = "Задачи"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -116,6 +133,23 @@ class ListViewController: UIViewController, ListViewProtocol {
             })
         }
     }
+
+//    private func showLoadingIndicator() {
+//        activityIndicator.startAnimating()
+//    }
+//
+//    private func hideLoadingIndicator() {
+//        activityIndicator.stopAnimating()
+//    }
+//
+//    private func setupActivityIndicator() {
+//        view.addSubview(activityIndicator)
+//
+//        NSLayoutConstraint.activate([
+//            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+//        ])
+//    }
 }
 
 extension ListViewController: UISearchResultsUpdating, UISearchBarDelegate {

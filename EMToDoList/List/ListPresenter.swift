@@ -36,12 +36,13 @@ class ListPresenter: ListPresenterProtocol {
         
     }
 
-    func appRuns() -> [CustomTodo] {
-        guard let todos = interactor?.loadTodos() else {
-            print("Interactor doesn't exist")
-            return []
-        }
+    func appStarts() {
+        interactor?.loadTodos()
+    }
 
-        return todos
+    func showData(todos: [CustomTodo]) {
+        DispatchQueue.main.async {
+            self.view?.displayLoadedData(customTodos: todos)
+        }
     }
 }
