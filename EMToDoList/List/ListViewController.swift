@@ -23,12 +23,12 @@ class ListViewController: UIViewController, ListViewProtocol {
         return tableView
     }()
 
-//    private var activityIndicator: UIActivityIndicatorView = {
-//        let indicator = UIActivityIndicatorView(style: .large)
-//        indicator.translatesAutoresizingMaskIntoConstraints = false
-//        indicator.hidesWhenStopped = true
-//        return indicator
-//    }()
+    private var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
 
     private let searchController = UISearchController(searchResultsController: nil)
 
@@ -38,9 +38,9 @@ class ListViewController: UIViewController, ListViewProtocol {
 
         setupView()
         setupSearchController()
-//        setupActivityIndicator()
-//
-//        showLoadingIndicator()
+        setupActivityIndicator()
+
+        showLoadingIndicator()
 
         navigationController?.toolbar.isTranslucent = false
         navigationController?.setToolbarHidden(false, animated: false)
@@ -52,7 +52,7 @@ class ListViewController: UIViewController, ListViewProtocol {
     }
 
     func displayLoadedData(customTodos: [CustomTodo]) {
-//        hideLoadingIndicator()
+        hideLoadingIndicator()
         self.list = customTodos
         tableView.reloadData()
     }
@@ -134,22 +134,22 @@ class ListViewController: UIViewController, ListViewProtocol {
         }
     }
 
-//    private func showLoadingIndicator() {
-//        activityIndicator.startAnimating()
-//    }
-//
-//    private func hideLoadingIndicator() {
-//        activityIndicator.stopAnimating()
-//    }
-//
-//    private func setupActivityIndicator() {
-//        view.addSubview(activityIndicator)
-//
-//        NSLayoutConstraint.activate([
-//            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-//        ])
-//    }
+    private func showLoadingIndicator() {
+        activityIndicator.startAnimating()
+    }
+
+    private func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
+    }
+
+    private func setupActivityIndicator() {
+        view.addSubview(activityIndicator)
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
 }
 
 extension ListViewController: UISearchResultsUpdating, UISearchBarDelegate {
