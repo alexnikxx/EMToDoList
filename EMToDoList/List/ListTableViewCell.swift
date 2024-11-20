@@ -7,10 +7,10 @@
 
 import UIKit
 
-class ListTableViewCell: UITableViewCell {
+final class ListTableViewCell: UITableViewCell {
     static let identifier = "ListTableViewCell"
 
-    private var title: UILabel = {
+    private let title: UILabel = {
         let label = UILabel()
         label.textColor = .todoWhite
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -18,7 +18,7 @@ class ListTableViewCell: UITableViewCell {
         return label
     }()
 
-    private var text: UILabel = {
+    private let text: UILabel = {
         let label = UILabel()
         label.textColor = .todoWhite
         label.numberOfLines = 0
@@ -27,9 +27,8 @@ class ListTableViewCell: UITableViewCell {
         return label
     }()
 
-    private var date: UILabel = {
+    private let date: UILabel = {
         let label = UILabel()
-        label.text = "10/11/24"
         label.textColor = .todoWhite
         label.alpha = 0.5
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
@@ -37,7 +36,7 @@ class ListTableViewCell: UITableViewCell {
         return label
     }()
 
-    var checkbox: UIImageView = {
+    let checkbox: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "todoCircle")
         imageView.contentMode = .scaleAspectFill
@@ -47,7 +46,7 @@ class ListTableViewCell: UITableViewCell {
         return imageView
     }()
 
-    private var separator: UIView = {
+    private let separator: UIView = {
         let separator = UIView()
         separator.backgroundColor = .todoStroke
         separator.frame = CGRect(x: 0, y: 0, width: 100, height: 2)
@@ -62,14 +61,6 @@ class ListTableViewCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    public func configure(todo: CustomTodo) {
-        if todo.isCompleted {
-            setupTodoAsCompleted(todo)
-        } else {
-            setupTodoAsIncompleted(todo)
-        }
     }
 
     public func update(todo: CustomTodo) {
@@ -87,6 +78,8 @@ class ListTableViewCell: UITableViewCell {
         text.text = todo.text
         text.alpha = 0.5
 
+        date.text = todo.convertDateToString()
+
         checkbox.image = UIImage(named: "todoCheckmark")
         checkbox.tintColor = UIColor.todoYellow
     }
@@ -99,11 +92,13 @@ class ListTableViewCell: UITableViewCell {
         text.text = todo.text
         text.alpha = 1
 
+        date.text = todo.convertDateToString()
+
         checkbox.image = UIImage(named: "todoCircle")
         checkbox.tintColor = UIColor.todoStroke
     }
 
-    func strikeText(strike: String) -> NSMutableAttributedString {
+    private func strikeText(strike: String) -> NSMutableAttributedString {
         let attributeString = NSMutableAttributedString(string: strike)
         attributeString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSMakeRange(0, attributeString.length))
         return attributeString

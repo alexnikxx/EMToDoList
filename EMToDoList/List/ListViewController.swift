@@ -28,14 +28,10 @@ class ListViewController: UIViewController, ListViewProtocol {
         setupView()
         setupSearchController()
 
-        navigationController?.isToolbarHidden = false
+        navigationController?.toolbar.isTranslucent = false
         navigationController?.setToolbarHidden(false, animated: false)
-        navigationController?.toolbar.barTintColor = .todoBlack
+        navigationController?.toolbar.barTintColor = .todoGray
         navigationController?.toolbar.tintColor = .todoWhite
-        if let toolbar = navigationController?.toolbar {
-            print("Toolbar frame: \(toolbar.frame)")
-            print("Toolbar hidden: \(navigationController?.isToolbarHidden ?? true)")
-        }
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,16 +51,19 @@ class ListViewController: UIViewController, ListViewProtocol {
         navigationItem.largeTitleDisplayMode = .always
 
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let actionButton = UIBarButtonItem(title: "Action", style: .plain, target: self, action: #selector(actionTapped))
-        let settingsButton = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
 
-        // Set toolbar items
-        toolbarItems = [actionButton, flexibleSpace, settingsButton]
+        let count = UILabel()
+        count.text = "7 задач"
+        count.font = UIFont.systemFont(ofSize: 11, weight: .regular)
+        count.textColor = .todoWhite
+        let actionButton = UIBarButtonItem(customView: count)
+
+        let settingsButton = UIBarButtonItem(title: nil, style: .plain, target: self, action: #selector(settingsTapped))
+        settingsButton.image = UIImage(systemName: "square.and.pencil")
+        settingsButton.tintColor = .todoYellow
+
+        toolbarItems = [flexibleSpace, actionButton, flexibleSpace, settingsButton]
         setToolbarItems(toolbarItems, animated: false)
-    }
-
-    override func setToolbarItems(_ toolbarItems: [UIBarButtonItem]?, animated: Bool) {
-
     }
 
     private func setupView() {
@@ -134,8 +133,9 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as? ListTableViewCell else {
             fatalError("The table view could not dequeue a custom cell.")
         }
+
         let todo = list[indexPath.row]
-        cell.configure(todo: todo)
+        cell.update(todo: todo)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapEdit(recognizer:)))
         cell.checkbox.addGestureRecognizer(tapGestureRecognizer)
@@ -147,6 +147,26 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         let todo = list[indexPath.row]
         let detailView = DetailViewController(todo: todo)
         navigationController?.pushViewController(detailView, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            let edit = UIAction(title: "Редактировать", image: UIImage(named: "edit")) { _ in
+                //edit
+            }
+
+            let export = UIAction(title: "Поделиться", image: UIImage(named: "export")) { _ in
+                //share
+            }
+
+            let delete = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { _ in
+                self.list.remove(at: indexPath.row)
+            }
+
+            let menu = UIMenu(title: "", children: [edit, export, delete])
+
+            return menu
+        }
     }
 
     @objc func tapEdit(recognizer: UITapGestureRecognizer) {
