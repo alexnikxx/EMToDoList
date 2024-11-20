@@ -8,8 +8,9 @@
 import UIKit
 
 class ListViewController: UIViewController, ListViewProtocol {
+    let configurator = ListConfigurator()
     var presenter: ListPresenterProtocol?
-    var list: [CustomTodo] = CustomTodo.examples
+    var list: [CustomTodo] = []
     var filteredList: [CustomTodo] = []
 
     private let tableView: UITableView = {
@@ -25,6 +26,7 @@ class ListViewController: UIViewController, ListViewProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configurator.configure(for: self)
         setupView()
         setupSearchController()
 
@@ -46,6 +48,9 @@ class ListViewController: UIViewController, ListViewProtocol {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        guard let presenter else { return }
+        list = presenter.appRuns()
+
         navigationItem.title = "Задачи"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always

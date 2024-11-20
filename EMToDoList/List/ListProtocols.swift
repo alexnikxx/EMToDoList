@@ -23,6 +23,7 @@ protocol ListInteractorProtocol: AnyObject {
     func addTodo(todo: CustomTodo)
     func editTodo(todo: CustomTodo)
     func deleteTodo(todo: CustomTodo)
+    func loadTodos() -> [CustomTodo]
 }
 
 protocol ListPresenterProtocol: AnyObject {
@@ -30,6 +31,7 @@ protocol ListPresenterProtocol: AnyObject {
     var interactor: ListInteractorProtocol? { get set }
     var view: ListViewProtocol? { get set } // weak
 
+    func appRuns() -> [CustomTodo]
     func newTodoButtonTapped()
     func todoTapped(todo: CustomTodo)
     func editTodoButtonTapped(todo: CustomTodo)

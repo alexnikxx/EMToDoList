@@ -35,6 +35,13 @@ class ListPresenter: ListPresenterProtocol {
     func searchButtonTapped() {
         
     }
-    
 
+    func appRuns() -> [CustomTodo] {
+        guard let todos = interactor?.loadTodos() else {
+            print("Interactor doesn't exist")
+            return []
+        }
+
+        return todos
+    }
 }
