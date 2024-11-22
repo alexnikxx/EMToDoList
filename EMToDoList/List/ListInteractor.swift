@@ -19,12 +19,13 @@ class ListInteractor: ListInteractorProtocol {
 
     func loadTodos() {
         //        if !UserDefaults.standard.didLoadJSON {
-
-        networkService.fetchTodos { result in
+        networkService.fetchTodos { [weak self] result in
             switch result {
             case .success(let todos):
                 UserDefaults.standard.didLoadJSON = true
-                self.presenter?.showData(todos: todos)
+                DispatchQueue.main.async {
+                    self?.presenter?.showData(todos: todos)
+                }
             case .failure(let error):
                 print(error.localizedDescription)
             }

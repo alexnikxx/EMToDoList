@@ -11,21 +11,21 @@ class ListPresenter: ListPresenterProtocol {
     var router: ListRouterProtocol?
     var interactor: ListInteractorProtocol?
     weak var view: ListViewProtocol?
-
+    
     init(view: ListViewProtocol) {
         self.view = view
     }
-
+    
     func newTodoButtonTapped() {
-
+        
     }
     
     func todoTapped(todo: CustomTodo) {
-
+        
     }
     
     func editTodoButtonTapped(todo: CustomTodo) {
-
+        
     }
     
     func deleteTodoButtonTapped(todo: CustomTodo) {
@@ -35,14 +35,12 @@ class ListPresenter: ListPresenterProtocol {
     func searchButtonTapped() {
         
     }
-
+    
     func appStarts() {
         interactor?.loadTodos()
     }
-
+    
     func showData(todos: [CustomTodo]) {
-        DispatchQueue.main.async {
-            self.view?.displayLoadedData(customTodos: todos)
-        }
+        self.view?.displayLoadedData(customTodos: todos)
     }
 }

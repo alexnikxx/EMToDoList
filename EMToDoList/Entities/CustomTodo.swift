@@ -10,7 +10,7 @@ import Foundation
 struct CustomTodo: Identifiable {
     let id = UUID()
     var title: String
-    var text: String
+    var text: String?
     var date: Date
     var isCompleted: Bool
 

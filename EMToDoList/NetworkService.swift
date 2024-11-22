@@ -9,7 +9,6 @@ import Foundation
 
 final class NetworkService {
     let decoder = JSONDecoder()
-    var jsonTodos: JSONTodoList = JSONTodoList(todos: [], total: 0, skip: 0, limit: 0)
 
     func fetchTodos(completionHandler: @escaping (Result<[CustomTodo], Error>) -> Void) {
         guard let url = URL(string: "https://dummyjson.com/todos") else {
@@ -44,7 +43,7 @@ final class NetworkService {
         var customTodos: [CustomTodo] = []
 
         for todo in jsonTodos.todos {
-            let customTodo = CustomTodo(title: todo.todo, text: "", date: Date(), isCompleted: todo.completed)
+            let customTodo = CustomTodo(title: todo.todo, text: nil, date: Date(), isCompleted: todo.completed)
             customTodos.append(customTodo)
         }
 
