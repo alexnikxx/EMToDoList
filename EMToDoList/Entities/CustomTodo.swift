@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CustomTodo: Identifiable {
+struct CustomTodo: Identifiable, Equatable {
     let id = UUID()
     var title: String
     var text: String?

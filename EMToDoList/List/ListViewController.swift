@@ -25,8 +25,8 @@ class ListViewController: UIViewController, ListViewProtocol {
 
     private var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
 
@@ -35,6 +35,7 @@ class ListViewController: UIViewController, ListViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurator.configure(for: self)
+        presenter?.appStarts()
 
         setupView()
         setupSearchController()
@@ -66,8 +67,6 @@ class ListViewController: UIViewController, ListViewProtocol {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        presenter?.appStarts()
-
         navigationItem.title = "Задачи"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
@@ -184,7 +183,11 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let todo = list[indexPath.row]
-        let detailView = DetailViewController(todo: todo)
+        let detailView = DetailViewController(todo: todo, saveTodo: { [weak self] updatedTodo in
+            self?.list[indexPath.row] = updatedTodo
+            self?.tableView.reloadData()
+        })
+        
         navigationController?.pushViewController(detailView, animated: true)
     }
 
@@ -198,8 +201,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                 //share
             }
 
-            let delete = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { _ in
-                self.list.remove(at: indexPath.row)
+            let delete = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { [weak self] _ in
+                self?.list.remove(at: indexPath.row)
             }
 
             let menu = UIMenu(title: "", children: [edit, export, delete])

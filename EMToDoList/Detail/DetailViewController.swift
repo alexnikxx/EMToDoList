@@ -9,9 +9,12 @@ import UIKit
 
 class DetailViewController: UIViewController, UITextViewDelegate {
     var todo: CustomTodo
+    var updatedTodo: CustomTodo = CustomTodo(title: "", text: "", date: Date(), isCompleted: false)
+    var saveTodo: (CustomTodo) -> Void
 
-    init(todo: CustomTodo) {
+    init(todo: CustomTodo, saveTodo: @escaping (CustomTodo) -> Void) {
         self.todo = todo
+        self.saveTodo = saveTodo
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -40,8 +43,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     private var textTextView: UITextView = {
         let text = UITextView()
         text.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        text.text = "Описание"
-        text.alpha = 0.5
+        text.alpha = 1
         text.textColor = .todoWhite
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
@@ -50,9 +52,24 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        configure(todo: todo)
+        self.updatedTodo = todo
+        configure(todo: updatedTodo)
 
         textTextView.delegate = self
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        updatedTodo.title = titleTextView.text
+        updatedTodo.text = textTextView.text
+
+        if updatedTodo.text == "Описание" {
+            updatedTodo.text = nil
+        }
+
+        if updatedTodo != todo {
+            saveTodo(updatedTodo)
+        }
     }
 
     private func setupView() {
@@ -82,6 +99,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
         titleTextView.text = todo.title
         guard let description = todo.text else {
             textTextView.text = "Описание"
+            textTextView.alpha = 0.5
             return
         }
 
