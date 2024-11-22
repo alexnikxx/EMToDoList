@@ -10,7 +10,7 @@ import Foundation
 class ListInteractor: ListInteractorProtocol {
     weak var presenter: ListPresenterProtocol?
     var networkService = NetworkService()
-
+    let coreDataManager = CoreDataManager.shared
     var todos: [CustomTodo] = []
 
     init(presenter: ListPresenterProtocol) {
@@ -18,23 +18,25 @@ class ListInteractor: ListInteractorProtocol {
     }
 
     func loadTodos() {
-        //        if !UserDefaults.standard.didLoadJSON {
-        networkService.fetchTodos { [weak self] result in
-            switch result {
-            case .success(let todos):
-                UserDefaults.standard.didLoadJSON = true
-                DispatchQueue.main.async {
-                    self?.presenter?.showData(todos: todos)
+        if !UserDefaults.standard.didLoadJSON {
+            networkService.fetchTodos { [weak self] result in
+                switch result {
+                case .success(let todos):
+                    UserDefaults.standard.didLoadJSON = true
+                    DispatchQueue.main.async {
+                        self?.presenter?.showData(todos: todos)
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
             }
+        } else {
+            let todos = coreDataManager.fetchTodos()
+            let customTodos = todos.compactMap { todo in
+                CustomTodo(title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+            }
+            self.presenter?.showData(todos: customTodos)
         }
-        //        } else {
-        //            // core data
-        //            print("Not the first time")
-        //            return []
-        //        }
     }
 
     func addTodo(todo: CustomTodo) {
