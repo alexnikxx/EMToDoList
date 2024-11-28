@@ -34,30 +34,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>
     ) {}
-
-    lazy var persistedContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "CoreData")
-        container.loadPersistentStores { description, error in
-            if let error {
-                print(error.localizedDescription)
-            } else {
-                guard let url = description.url else { return }
-                print("DB url - ", url.absoluteString)
-            }
-        }
-
-        return container
-    }()
-
-    func saveContext() {
-        let context = persistedContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                fatalError(error.localizedDescription)
-            }
-        }
-    }
 }
 

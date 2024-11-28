@@ -29,7 +29,7 @@ class ListPresenter: ListPresenterProtocol {
     }
     
     func deleteTodoButtonTapped(todo: CustomTodo) {
-        
+        interactor?.deleteTodo(todo: todo)
     }
     
     func searchButtonTapped() {

@@ -8,11 +8,27 @@
 import Foundation
 
 struct CustomTodo: Identifiable, Equatable {
-    let id = UUID()
+    let id: UUID
     var title: String
     var text: String?
     var date: Date
     var isCompleted: Bool
+
+    init(title: String, text: String? = nil, date: Date, isCompleted: Bool) {
+        self.id = UUID()
+        self.title = title
+        self.text = text
+        self.date = date
+        self.isCompleted = isCompleted
+    }
+
+    init(id: UUID, title: String, text: String? = nil, date: Date, isCompleted: Bool) {
+        self.id = id
+        self.title = title
+        self.text = text
+        self.date = date
+        self.isCompleted = isCompleted
+    }
 
     func convertDateToString() -> String {
         let dateFormatter = DateFormatter()

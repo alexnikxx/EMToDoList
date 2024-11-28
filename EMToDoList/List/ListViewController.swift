@@ -35,13 +35,12 @@ class ListViewController: UIViewController, ListViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurator.configure(for: self)
+        activityIndicator.startAnimating()
         presenter?.appStarts()
 
         setupView()
         setupSearchController()
         setupActivityIndicator()
-
-        showLoadingIndicator()
 
         navigationController?.toolbar.isTranslucent = false
         navigationController?.setToolbarHidden(false, animated: false)
@@ -202,7 +201,15 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             }
 
             let delete = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { [weak self] _ in
-                self?.list.remove(at: indexPath.row)
+                guard let todo = self?.list[indexPath.row] else {
+                    return
+                }
+                let index = indexPath.row
+                self?.list.remove(at: index)
+
+                let indexPath = IndexPath(row: index, section: 0)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                self?.presenter?.deleteTodoButtonTapped(todo: todo)
             }
 
             let menu = UIMenu(title: "", children: [edit, export, delete])

@@ -23,6 +23,10 @@ class ListInteractor: ListInteractorProtocol {
                 switch result {
                 case .success(let todos):
                     UserDefaults.standard.didLoadJSON = true
+                    todos.forEach { todo in
+                        self?.coreDataManager.createTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+                    }
+
                     DispatchQueue.main.async {
                         self?.presenter?.showData(todos: todos)
                     }
@@ -33,7 +37,7 @@ class ListInteractor: ListInteractorProtocol {
         } else {
             let todos = coreDataManager.fetchTodos()
             let customTodos = todos.compactMap { todo in
-                CustomTodo(title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+                CustomTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
             }
             self.presenter?.showData(todos: customTodos)
         }
@@ -48,6 +52,6 @@ class ListInteractor: ListInteractorProtocol {
     }
 
     func deleteTodo(todo: CustomTodo) {
-
+        coreDataManager.deleteTodo(with: todo.id)
     }
 }
