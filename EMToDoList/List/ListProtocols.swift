@@ -36,6 +36,7 @@ protocol ListPresenterProtocol: AnyObject {
     func appStarts()
     func showData(todos: [CustomTodo])
     func newTodoButtonTapped()
+    func updateCount()
     func todoTapped(todo: CustomTodo)
     func editTodoButtonTapped(todo: CustomTodo)
     func deleteTodoButtonTapped(todo: CustomTodo)

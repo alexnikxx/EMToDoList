@@ -53,5 +53,6 @@ class ListInteractor: ListInteractorProtocol {
 
     func deleteTodo(todo: CustomTodo) {
         coreDataManager.deleteTodo(with: todo.id)
+//        presenter.updateCount()
     }
 }

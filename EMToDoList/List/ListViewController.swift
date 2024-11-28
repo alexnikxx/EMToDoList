@@ -30,6 +30,14 @@ class ListViewController: UIViewController, ListViewProtocol {
         return indicator
     }()
 
+    private var count: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 11, weight: .regular)
+        label.textColor = .todoWhite
+        label.text = "0 задач"
+        return label
+    }()
+
     private let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
@@ -55,14 +63,20 @@ class ListViewController: UIViewController, ListViewProtocol {
         hideLoadingIndicator()
         self.list = customTodos
         tableView.reloadData()
+        count.text = "\(list.count) задач"
     }
 
     @objc func actionTapped() {
         print("Action tapped")
     }
 
-    @objc func settingsTapped() {
-        print("Settings tapped")
+    @objc func newTaskButtonTapped() {
+        presenter?.newTodoButtonTapped()
+    }
+
+    func updateCount() -> Int {
+        let count = 0
+        return count
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -72,17 +86,13 @@ class ListViewController: UIViewController, ListViewProtocol {
 
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
-        let count = UILabel()
-        count.text = "7 задач"
-        count.font = UIFont.systemFont(ofSize: 11, weight: .regular)
-        count.textColor = .todoWhite
-        let actionButton = UIBarButtonItem(customView: count)
+        let tasksCountLabel = UIBarButtonItem(customView: self.count)
 
-        let settingsButton = UIBarButtonItem(title: nil, style: .plain, target: self, action: #selector(settingsTapped))
-        settingsButton.image = UIImage(systemName: "square.and.pencil")
-        settingsButton.tintColor = .todoYellow
+        let newTaskButton = UIBarButtonItem(title: nil, style: .plain, target: self, action: #selector(newTaskButtonTapped))
+        newTaskButton.image = UIImage(systemName: "square.and.pencil")
+        newTaskButton.tintColor = .todoYellow
 
-        toolbarItems = [flexibleSpace, actionButton, flexibleSpace, settingsButton]
+        toolbarItems = [flexibleSpace, tasksCountLabel, flexibleSpace, newTaskButton]
         setToolbarItems(toolbarItems, animated: false)
     }
 
@@ -122,15 +132,7 @@ class ListViewController: UIViewController, ListViewProtocol {
         return isActive && !searchText.isEmpty
     }
 
-    func updateSearchController(searchBarText: String?) {
-        if let searchText = searchBarText?.lowercased() {
-            guard !searchText.isEmpty else { return }
-
-            filteredList = list.filter({
-                $0.title.lowercased().contains(searchText)
-            })
-        }
-    }
+    func updateSearchController(searchBarText: String?) {}
 
     private func showLoadingIndicator() {
         activityIndicator.startAnimating()
@@ -201,15 +203,17 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             }
 
             let delete = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { [weak self] _ in
-                guard let todo = self?.list[indexPath.row] else {
-                    return
-                }
+                guard let self = self else { return }
+
+                let todo = self.list[indexPath.row]
                 let index = indexPath.row
-                self?.list.remove(at: index)
+                self.list.remove(at: index)
 
                 let indexPath = IndexPath(row: index, section: 0)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                self?.presenter?.deleteTodoButtonTapped(todo: todo)
+                self.presenter?.deleteTodoButtonTapped(todo: todo)
+
+                self.count.text = "\(list.count) задач"
             }
 
             let menu = UIMenu(title: "", children: [edit, export, delete])

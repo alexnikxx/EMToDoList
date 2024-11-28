@@ -16,8 +16,8 @@ class ListPresenter: ListPresenterProtocol {
         self.view = view
     }
     
-    func newTodoButtonTapped() {
-        
+    @objc func newTodoButtonTapped() {
+
     }
     
     func todoTapped(todo: CustomTodo) {
@@ -31,7 +31,11 @@ class ListPresenter: ListPresenterProtocol {
     func deleteTodoButtonTapped(todo: CustomTodo) {
         interactor?.deleteTodo(todo: todo)
     }
-    
+
+    func updateCount() {
+//        view.updateCount()
+    }
+
     func searchButtonTapped() {
         
     }
