@@ -7,7 +7,10 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITextViewDelegate {
+class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDelegate {
+    private var configurator = DetailConfigurator()
+    var presenter: DetailPresenterProtocol?
+
     var todo: CustomTodo
     var updatedTodo: CustomTodo = CustomTodo(title: "", text: "", date: Date(), isCompleted: false)
     var saveTodo: (CustomTodo) -> Void
@@ -51,6 +54,8 @@ class DetailViewController: UIViewController, UITextViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configurator.configure(for: self)
+
         setupView()
         self.updatedTodo = todo
         configure(todo: updatedTodo)

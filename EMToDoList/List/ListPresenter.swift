@@ -17,7 +17,7 @@ class ListPresenter: ListPresenterProtocol {
     }
     
     @objc func newTodoButtonTapped() {
-
+        router?.openTodoDetails(todo: CustomTodo(title: "", date: Date(), isCompleted: false))
     }
     
     func todoTapped(todo: CustomTodo) {
