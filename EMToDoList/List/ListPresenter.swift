@@ -15,7 +15,11 @@ class ListPresenter: ListPresenterProtocol {
     init(view: ListViewProtocol) {
         self.view = view
     }
-    
+
+    func viewWillAppear() {
+        interactor?.loadTodos()
+    }
+
     @objc func newTodoButtonTapped() {
         router?.openTodoDetails(todo: CustomTodo(title: "", date: Date(), isCompleted: false))
     }
@@ -25,26 +29,22 @@ class ListPresenter: ListPresenterProtocol {
     }
     
     func editTodoButtonTapped(todo: CustomTodo) {
-        
+        router?.openTodoDetails(todo: todo)
     }
     
     func deleteTodoButtonTapped(todo: CustomTodo) {
         interactor?.deleteTodo(todo: todo)
     }
 
-    func updateCount() {
-//        view.updateCount()
+    func updateTodos(todos: [CustomTodo]) {
+        self.view?.displayLoadedData(customTodos: todos)
     }
 
-    func searchButtonTapped() {
-        
-    }
-    
-    func appStarts() {
-        interactor?.loadTodos()
-    }
-    
-    func showData(todos: [CustomTodo]) {
+    func didLoadTodos(todos: [CustomTodo]) {
         self.view?.displayLoadedData(customTodos: todos)
+    }
+
+    func updateStatus(of todo: CustomTodo) {
+        interactor?.editTodo(todo: todo)
     }
 }

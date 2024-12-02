@@ -9,6 +9,7 @@ import Foundation
 
 final class DetailInteractor: DetailInteractorProtocol {
     weak var presenter: DetailPresenterProtocol?
+    let coreDataManager = CoreDataManager.shared
 
     init(presenter: DetailPresenterProtocol) {
         self.presenter = presenter

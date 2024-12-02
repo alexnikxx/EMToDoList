@@ -11,7 +11,14 @@ class ListInteractor: ListInteractorProtocol {
     weak var presenter: ListPresenterProtocol?
     var networkService = NetworkService()
     let coreDataManager = CoreDataManager.shared
-    var todos: [CustomTodo] = []
+
+    var todos: [CustomTodo] {
+        let todos = coreDataManager.fetchTodos()
+        let customTodos = todos.compactMap { todo in
+            CustomTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+        }
+        return customTodos
+    }
 
     init(presenter: ListPresenterProtocol) {
         self.presenter = presenter
@@ -19,27 +26,9 @@ class ListInteractor: ListInteractorProtocol {
 
     func loadTodos() {
         if !UserDefaults.standard.didLoadJSON {
-            networkService.fetchTodos { [weak self] result in
-                switch result {
-                case .success(let todos):
-                    UserDefaults.standard.didLoadJSON = true
-                    todos.forEach { todo in
-                        self?.coreDataManager.createTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
-                    }
-
-                    DispatchQueue.main.async {
-                        self?.presenter?.showData(todos: todos)
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+            loadTodosFromURL()
         } else {
-            let todos = coreDataManager.fetchTodos()
-            let customTodos = todos.compactMap { todo in
-                CustomTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
-            }
-            self.presenter?.showData(todos: customTodos)
+            self.presenter?.didLoadTodos(todos: todos)
         }
     }
 
@@ -48,11 +37,30 @@ class ListInteractor: ListInteractorProtocol {
     }
 
     func editTodo(todo: CustomTodo) {
-
+        coreDataManager.updateTodo(with: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+        presenter?.updateTodos(todos: todos)
     }
 
     func deleteTodo(todo: CustomTodo) {
         coreDataManager.deleteTodo(with: todo.id)
-//        presenter.updateCount()
+        presenter?.updateTodos(todos: todos)
+    }
+
+    private func loadTodosFromURL() {
+        networkService.fetchTodos { [weak self] result in
+            switch result {
+            case .success(let todos):
+                UserDefaults.standard.didLoadJSON = true
+                todos.forEach { todo in
+                    self?.coreDataManager.createTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+                }
+
+                DispatchQueue.main.async {
+                    self?.presenter?.didLoadTodos(todos: todos)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }

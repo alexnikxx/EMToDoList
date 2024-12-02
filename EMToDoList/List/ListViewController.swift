@@ -13,7 +13,12 @@ class ListViewController: UIViewController, ListViewProtocol {
 
     //MARK: Main properties
 
-    private var list: [CustomTodo] = []
+    private var list: [CustomTodo] = [] {
+        didSet {
+            tableView.reloadData()
+            count.text = "\(list.count) задач"
+        }
+    }
     private var filteredList: [CustomTodo] = []
 
     var tableView: UITableView = {
@@ -64,7 +69,6 @@ class ListViewController: UIViewController, ListViewProtocol {
         super.viewDidLoad()
         configurator.configure(for: self)
         showLoadingIndicator()
-        presenter?.appStarts()
 
         setupView()
         setupNavBarAndToolbar()
@@ -75,14 +79,13 @@ class ListViewController: UIViewController, ListViewProtocol {
     func displayLoadedData(customTodos: [CustomTodo]) {
         hideLoadingIndicator()
         self.list = customTodos
-        tableView.reloadData()
-        count.text = "\(list.count) задач"
     }
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
 
+        presenter?.viewWillAppear()
         setupToolbar()
     }
 
@@ -222,12 +225,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             todo = list[indexPath.row]
         }
 
-        let detailView = DetailViewController(todo: todo, saveTodo: { [weak self] updatedTodo in
-            self?.list[indexPath.row] = updatedTodo
-            self?.tableView.reloadData()
-        })
-        
-        navigationController?.pushViewController(detailView, animated: true)
+        presenter?.editTodoButtonTapped(todo: todo)
     }
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -241,17 +239,10 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             }
 
             let delete = UIAction(title: "Удалить", image: UIImage(named: "trash"), attributes: .destructive) { [weak self] _ in
-                guard let self = self else { return }
+                guard let self else { return }
 
                 let todo = self.list[indexPath.row]
-                let index = indexPath.row
-                self.list.remove(at: index)
-
-                let indexPath = IndexPath(row: index, section: 0)
-                tableView.deleteRows(at: [indexPath], with: .fade)
                 self.presenter?.deleteTodoButtonTapped(todo: todo)
-
-                self.count.text = "\(list.count) задач"
             }
 
             let menu = UIMenu(title: "", children: [edit, export, delete])
@@ -268,7 +259,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
                     var todo = list[tapIndexPath.row]
                     todo.isCompleted.toggle()
                     tappedCell.update(todo: todo)
-                    list[tapIndexPath.row] = todo
+                    presenter?.updateStatus(of: todo)
                 }
             }
         }

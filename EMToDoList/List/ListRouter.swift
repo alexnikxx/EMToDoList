@@ -15,8 +15,8 @@ class ListRouter: ListRouterProtocol {
     }
 
     func openTodoDetails(todo: CustomTodo) {
-//        let todoDetailsView = DetailViewController(todo: todo, saveTodo: <#(CustomTodo) -> Void#>)
-//        view?.navigationController?.pushViewController(todoDetailsView, animated: true)
+        let detailView = DetailViewController(todo: todo)
+        view?.navigationController?.pushViewController(detailView, animated: true)
     }
     
 

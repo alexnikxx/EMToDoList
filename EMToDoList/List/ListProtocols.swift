@@ -33,14 +33,14 @@ protocol ListPresenterProtocol: AnyObject {
     var interactor: ListInteractorProtocol? { get set }
     var view: ListViewProtocol? { get set } // weak
 
-    func appStarts()
-    func showData(todos: [CustomTodo])
+    func viewWillAppear()
+    func didLoadTodos(todos: [CustomTodo])
+    func updateTodos(todos: [CustomTodo])
+    func updateStatus(of todo: CustomTodo)
     func newTodoButtonTapped()
-    func updateCount()
     func todoTapped(todo: CustomTodo)
     func editTodoButtonTapped(todo: CustomTodo)
     func deleteTodoButtonTapped(todo: CustomTodo)
-    func searchButtonTapped()
 }
 
 protocol ListRouterProtocol: AnyObject {
