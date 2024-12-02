@@ -13,11 +13,9 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
 
     var todo: CustomTodo
     var updatedTodo: CustomTodo = CustomTodo(title: "", text: "", date: Date(), isCompleted: false)
-    var saveTodo: (CustomTodo) -> Void
 
-    init(todo: CustomTodo, saveTodo: @escaping (CustomTodo) -> Void) {
+    init(todo: CustomTodo) {
         self.todo = todo
-        self.saveTodo = saveTodo
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -29,6 +27,7 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
         let text = UITextView()
         text.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         text.textColor = .todoWhite
+        text.tag = 1
         text.isScrollEnabled = false
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
@@ -48,6 +47,7 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
         text.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         text.alpha = 1
         text.textColor = .todoWhite
+        text.tag = 2
         text.translatesAutoresizingMaskIntoConstraints = false
         return text
     }()
@@ -60,7 +60,13 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
         self.updatedTodo = todo
         configure(todo: updatedTodo)
 
+        titleTextView.delegate = self
         textTextView.delegate = self
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        presenter?.buttonBackTapped()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -73,7 +79,7 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
         }
 
         if updatedTodo != todo {
-            saveTodo(updatedTodo)
+            //
         }
     }
 
@@ -101,7 +107,13 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
     }
 
     private func configure(todo: CustomTodo) {
-        titleTextView.text = todo.title
+        if todo.title.isEmpty {
+            titleTextView.text = "Заголовок"
+            titleTextView.alpha = 0.5
+        } else {
+            titleTextView.text = todo.title
+        }
+
         guard let description = todo.text else {
             textTextView.text = "Описание"
             textTextView.alpha = 0.5
@@ -112,14 +124,24 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textTextView.alpha == 0.5 {
+        if textView.tag == 1 && titleTextView.alpha == 0.5 {
+            titleTextView.text = ""
+            titleTextView.alpha = 1
+        }
+
+        if textView.tag == 2 && textTextView.alpha == 0.5 {
             textTextView.text = ""
             textTextView.alpha = 1
         }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textTextView.text == "" {
+        if textView.tag == 1 && titleTextView.text == "" {
+            titleTextView.text = "Заголовок"
+            titleTextView.alpha = 0.5
+        }
+
+        if textView.tag == 2 && textTextView.text == "" {
             textTextView.text = "Описание"
             textTextView.alpha = 0.5
         }
