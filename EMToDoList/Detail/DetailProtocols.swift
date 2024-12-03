@@ -13,14 +13,12 @@ protocol DetailConfiguratorProtocol: AnyObject {
 
 protocol DetailViewProtocol: AnyObject {
     var presenter: DetailPresenterProtocol? { get set }
-
 }
 
 protocol DetailInteractorProtocol: AnyObject {
     var presenter: DetailPresenterProtocol? { get set } // weak
 
     func saveTodo(todo: CustomTodo)
-    func editTodo(todo: CustomTodo)
 }
 
 protocol DetailPresenterProtocol: AnyObject {

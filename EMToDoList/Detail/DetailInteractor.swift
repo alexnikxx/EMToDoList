@@ -22,8 +22,4 @@ final class DetailInteractor: DetailInteractorProtocol {
             coreDataManager.createTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
         }
     }
-
-    func editTodo(todo: CustomTodo) {
-        //
-    }
 }
