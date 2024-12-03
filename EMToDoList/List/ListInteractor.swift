@@ -17,7 +17,7 @@ class ListInteractor: ListInteractorProtocol {
         let customTodos = todos.compactMap { todo in
             CustomTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
         }
-        return customTodos
+        return customTodos.sorted(by: { $0.date > $1.date })
     }
 
     init(presenter: ListPresenterProtocol) {
@@ -37,7 +37,7 @@ class ListInteractor: ListInteractorProtocol {
     }
 
     func editTodo(todo: CustomTodo) {
-        coreDataManager.updateTodo(with: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+        coreDataManager.updateTodo(with: todo.id, title: todo.title, text: todo.text, isCompleted: todo.isCompleted)
         presenter?.updateTodos(todos: todos)
     }
 

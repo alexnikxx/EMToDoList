@@ -76,7 +76,7 @@ final class CoreDataManager: NSObject {
         return nil
     }
 
-    public func updateTodo(with id: UUID, title: String, text: String?, date: Date, isCompleted: Bool) {
+    public func updateTodo(with id: UUID, title: String, text: String?, isCompleted: Bool) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Todo")
         do {
             guard let todos = try persistedContainer.viewContext.fetch(fetchRequest) as? [Todo],
@@ -84,7 +84,6 @@ final class CoreDataManager: NSObject {
             todo.id = id
             todo.title = title
             todo.text = text
-            todo.date = date
             todo.isCompleted = isCompleted
         } catch {
             print(error.localizedDescription)

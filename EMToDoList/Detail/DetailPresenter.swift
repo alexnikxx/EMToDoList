@@ -16,11 +16,11 @@ final class DetailPresenter: DetailPresenterProtocol {
         self.view = view
     }
 
-    func buttonSaveTapped() {
-        //
+    func buttonSaveTapped(todo: CustomTodo) {
+        interactor?.saveTodo(todo: todo)
     }
 
-    func buttonBackTapped() {
-//        interactor?.saveTodo(todo: <#T##CustomTodo#>)
+    func buttonBackTapped(todo: CustomTodo) {
+        interactor?.saveTodo(todo: todo)
     }
 }

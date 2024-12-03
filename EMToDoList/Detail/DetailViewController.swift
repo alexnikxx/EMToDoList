@@ -56,6 +56,10 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
         super.viewDidLoad()
         configurator.configure(for: self)
 
+        navigationController?.navigationBar.tintColor = .todoYellow
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveButtonTapped))
+        navigationItem.rightBarButtonItem?.isHidden = true
+
         setupView()
         self.updatedTodo = todo
         configure(todo: updatedTodo)
@@ -64,13 +68,24 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
         textTextView.delegate = self
     }
 
+    @objc private func saveButtonTapped() {
+        dismissKeyboard()
+        checkChanges()
+        presenter?.buttonSaveTapped(todo: updatedTodo)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        presenter?.buttonBackTapped()
+        checkChanges()
+        presenter?.buttonBackTapped(todo: updatedTodo)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        checkChanges()
+    }
+
+    private func checkChanges() {
         updatedTodo.title = titleTextView.text
         updatedTodo.text = textTextView.text
 
@@ -78,9 +93,13 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
             updatedTodo.text = nil
         }
 
-        if updatedTodo != todo {
-            //
+        if updatedTodo.title == "Заголовок" {
+            updatedTodo.title = todo.title
         }
+    }
+
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     private func setupView() {
@@ -124,6 +143,8 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
+        navigationItem.rightBarButtonItem?.isHidden = false
+
         if textView.tag == 1 && titleTextView.alpha == 0.5 {
             titleTextView.text = ""
             titleTextView.alpha = 1
@@ -136,6 +157,8 @@ class DetailViewController: UIViewController, DetailViewProtocol, UITextViewDele
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
+        navigationItem.rightBarButtonItem?.isHidden = true
+
         if textView.tag == 1 && titleTextView.text == "" {
             titleTextView.text = "Заголовок"
             titleTextView.alpha = 0.5

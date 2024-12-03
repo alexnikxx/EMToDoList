@@ -16,7 +16,11 @@ final class DetailInteractor: DetailInteractorProtocol {
     }
 
     func saveTodo(todo: CustomTodo) {
-        //
+        if coreDataManager.fetchTodos().contains(where: { $0.id == todo.id }) {
+            coreDataManager.updateTodo(with: todo.id, title: todo.title, text: todo.text, isCompleted: todo.isCompleted)
+        } else {
+            coreDataManager.createTodo(id: todo.id, title: todo.title, text: todo.text, date: todo.date, isCompleted: todo.isCompleted)
+        }
     }
 
     func editTodo(todo: CustomTodo) {

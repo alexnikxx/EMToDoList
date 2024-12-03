@@ -28,8 +28,8 @@ protocol DetailPresenterProtocol: AnyObject {
     var interactor: DetailInteractorProtocol? { get set }
     var view: DetailViewProtocol? { get set } // weak
 
-    func buttonSaveTapped()
-    func buttonBackTapped()
+    func buttonSaveTapped(todo: CustomTodo)
+    func buttonBackTapped(todo: CustomTodo)
 }
 
 protocol DetailRouterProtocol: AnyObject {

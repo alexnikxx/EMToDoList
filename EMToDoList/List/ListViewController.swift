@@ -230,8 +230,10 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
-            let edit = UIAction(title: "Редактировать", image: UIImage(named: "edit")) { _ in
-                //edit
+            let edit = UIAction(title: "Редактировать", image: UIImage(named: "edit")) { [weak self] _ in
+                guard let self else { return }
+                let todo = self.list[indexPath.row]
+                self.presenter?.editTodoButtonTapped(todo: todo)
             }
 
             let export = UIAction(title: "Поделиться", image: UIImage(named: "export")) { _ in
