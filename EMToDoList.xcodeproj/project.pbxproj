@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2A8020742CF10C9D005BF6ED /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2A8020722CF10C9D005BF6ED /* CoreData.xcdatamodeld */; };
+		2A8020782CF10DF0005BF6ED /* Todo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8020762CF10DF0005BF6ED /* Todo+CoreDataProperties.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		2A0710802CE8C79E008DB56A /* EMToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EMToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A8020732CF10C9D005BF6ED /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
+		2A8020762CF10DF0005BF6ED /* Todo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Todo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +52,8 @@
 		2A0710772CE8C79E008DB56A = {
 			isa = PBXGroup;
 			children = (
+				2A8020762CF10DF0005BF6ED /* Todo+CoreDataProperties.swift */,
+				2A8020722CF10C9D005BF6ED /* CoreData.xcdatamodeld */,
 				2A0710822CE8C79E008DB56A /* EMToDoList */,
 				2A0710812CE8C79E008DB56A /* Products */,
 			);
@@ -132,6 +141,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A8020742CF10C9D005BF6ED /* CoreData.xcdatamodeld in Sources */,
+				2A8020782CF10DF0005BF6ED /* Todo+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +163,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -179,6 +191,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -333,6 +346,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2A8020722CF10C9D005BF6ED /* CoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2A8020732CF10C9D005BF6ED /* CoreData.xcdatamodel */,
+			);
+			currentVersion = 2A8020732CF10C9D005BF6ED /* CoreData.xcdatamodel */;
+			path = CoreData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 2A0710782CE8C79E008DB56A /* Project object */;
 }
