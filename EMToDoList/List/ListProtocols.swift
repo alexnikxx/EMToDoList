@@ -22,10 +22,9 @@ protocol ListViewProtocol: AnyObject {
 protocol ListInteractorProtocol: AnyObject {
     var presenter: ListPresenterProtocol? { get set } // weak
 
-    func addTodo(todo: CustomTodo)
+    func loadTodos()
     func editTodo(todo: CustomTodo)
     func deleteTodo(todo: CustomTodo)
-    func loadTodos()
 }
 
 protocol ListPresenterProtocol: AnyObject {
@@ -36,9 +35,8 @@ protocol ListPresenterProtocol: AnyObject {
     func viewWillAppear()
     func didLoadTodos(todos: [CustomTodo])
     func updateTodos(todos: [CustomTodo])
-    func updateStatus(of todo: CustomTodo)
     func newTodoButtonTapped()
-    func todoTapped(todo: CustomTodo)
+    func updateStatus(of todo: CustomTodo)
     func editTodoButtonTapped(todo: CustomTodo)
     func deleteTodoButtonTapped(todo: CustomTodo)
 }

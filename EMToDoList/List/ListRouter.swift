@@ -18,6 +18,4 @@ class ListRouter: ListRouterProtocol {
         let detailView = DetailViewController(todo: todo)
         view?.navigationController?.pushViewController(detailView, animated: true)
     }
-    
-
 }

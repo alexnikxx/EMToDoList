@@ -20,31 +20,27 @@ class ListPresenter: ListPresenterProtocol {
         interactor?.loadTodos()
     }
 
-    @objc func newTodoButtonTapped() {
+    func updateTodos(todos: [CustomTodo]) {
+        view?.displayLoadedData(customTodos: todos)
+    }
+
+    func didLoadTodos(todos: [CustomTodo]) {
+        view?.displayLoadedData(customTodos: todos)
+    }
+
+    func newTodoButtonTapped() {
         router?.openTodoDetails(todo: CustomTodo(title: "", date: Date(), isCompleted: false))
     }
-    
-    func todoTapped(todo: CustomTodo) {
-        
+
+    func updateStatus(of todo: CustomTodo) {
+        interactor?.editTodo(todo: todo)
     }
-    
+
     func editTodoButtonTapped(todo: CustomTodo) {
         router?.openTodoDetails(todo: todo)
     }
     
     func deleteTodoButtonTapped(todo: CustomTodo) {
         interactor?.deleteTodo(todo: todo)
-    }
-
-    func updateTodos(todos: [CustomTodo]) {
-        self.view?.displayLoadedData(customTodos: todos)
-    }
-
-    func didLoadTodos(todos: [CustomTodo]) {
-        self.view?.displayLoadedData(customTodos: todos)
-    }
-
-    func updateStatus(of todo: CustomTodo) {
-        interactor?.editTodo(todo: todo)
     }
 }

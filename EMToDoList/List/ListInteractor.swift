@@ -28,12 +28,8 @@ class ListInteractor: ListInteractorProtocol {
         if !UserDefaults.standard.didLoadJSON {
             loadTodosFromURL()
         } else {
-            self.presenter?.didLoadTodos(todos: todos)
+            presenter?.didLoadTodos(todos: todos)
         }
-    }
-
-    func addTodo(todo: CustomTodo) {
-
     }
 
     func editTodo(todo: CustomTodo) {
